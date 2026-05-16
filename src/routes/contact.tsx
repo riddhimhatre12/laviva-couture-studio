@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { toast } from "sonner";
 import { Announcement, Nav, FloatingWhatsApp } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { FadeIn } from "@/components/site/Reveal";
@@ -52,7 +53,11 @@ function Contact() {
               </select>
               <input placeholder="Preferred Date" type="date" className="sm:col-span-2 bg-transparent border-b border-ink/30 py-3 text-sm text-ink/60 focus:outline-none focus:border-gold transition-colors" />
               <textarea placeholder="Tell us about your occasion" rows={4} className="sm:col-span-2 bg-transparent border-b border-ink/30 py-3 text-sm placeholder:text-ink/40 focus:outline-none focus:border-gold transition-colors resize-none" />
-              <button type="button" className="sm:col-span-2 mt-4 bg-ink text-ivory py-4 text-[11px] uppercase tracking-[0.3em] hover:bg-gold transition-all duration-500">
+              <button 
+                type="button" 
+                onClick={() => toast.success("Appointment Request Received")}
+                className="sm:col-span-2 mt-4 bg-ink text-ivory py-4 text-[11px] uppercase tracking-[0.3em] hover:bg-gold transition-all duration-500"
+              >
                 Reserve Appointment
               </button>
             </form>

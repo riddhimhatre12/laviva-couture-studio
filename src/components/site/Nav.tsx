@@ -11,9 +11,10 @@ const Whatsapp = (props: React.SVGProps<SVGSVGElement>) => (
 const LINKS = [
   { to: "/", label: "Home" },
   { to: "/collections", label: "Collections" },
-  { to: "/mens", label: "Men's Couture" },
-  { to: "/womens", label: "Women's Wear" },
-  { to: "/new-arrivals", label: "New Arrivals" },
+  { to: "/mens", label: "Couture" },
+  { to: "/womens", label: "Women's" },
+  { to: "/collections", label: "Fusion" },
+  { to: "/new-arrivals", label: "New In" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ] as const;
@@ -21,15 +22,15 @@ const LINKS = [
 export function Announcement() {
   const items = [
     "Bespoke Bridal & Groom Atelier — Virar",
+    "Indo-Western & Casual Luxe Collections Now Live",
     "Complimentary Styling Consultation",
     "Pan-India Express Delivery",
-    "Festive Couture Volume IV — Now Open",
   ];
   return (
     <div className="bg-ink text-ivory overflow-hidden py-2.5 text-[10px] uppercase tracking-[0.25em] relative z-[60]">
       <div className="flex w-max animate-marquee whitespace-nowrap">
         {[...items, ...items, ...items].map((t, i) => (
-          <span key={i} className="px-8 flex items-center gap-8">
+          <span key={i} className="px-8 flex items-center gap-8 font-medium">
             {t}
             <span className="text-gold">✦</span>
           </span>
@@ -62,51 +63,56 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
       <nav
         className={`fixed top-[33px] left-0 right-0 z-50 transition-all duration-700 ease-out ${
           solid
-            ? "bg-ivory/75 backdrop-blur-2xl py-3.5 border-b border-ink/5 shadow-[0_1px_30px_-20px_rgba(0,0,0,0.2)]"
+            ? "bg-ivory/85 backdrop-blur-2xl py-3.5 border-b border-ink/5 shadow-[0_1px_30px_-20px_rgba(0,0,0,0.15)]"
             : "bg-transparent py-6"
         }`}
       >
-        <div className={`px-5 md:px-12 flex items-center justify-between transition-colors duration-700 ${solid ? "text-ink" : "text-ivory"}`}>
-          {/* Left: mobile menu / desktop links */}
-          <div className="flex items-center gap-8 flex-1">
+        <div className={`px-4 xl:px-8 grid grid-cols-[1fr_auto_1fr] items-center transition-colors duration-700 ${solid ? "text-ink" : "text-ivory"}`}>
+          {/* Left Column: Essential Collections */}
+          <div className="flex items-center min-w-0">
+            {/* Desktop Left Links */}
+            <div className="hidden xl:flex gap-4 text-[9px] uppercase tracking-[0.22em] font-medium whitespace-nowrap">
+              {LINKS.slice(1, 5).map((l, i) => (
+                <Link
+                  key={l.label}
+                  to={l.to}
+                  className="relative group py-1.5"
+                  activeProps={{ className: "text-gold" }}
+                >
+                  {l.label}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
+                </Link>
+              ))}
+            </div>
+
+            {/* Mobile Menu Button */}
             <button
               aria-label="Menu"
               onClick={() => setOpen(true)}
-              className="lg:hidden relative size-8 flex flex-col justify-center items-start gap-[5px] group"
+              className="xl:hidden relative size-8 flex flex-col justify-center items-start gap-[5px] group"
             >
               <span className="block h-px w-6 bg-current transition-transform duration-500" />
               <span className="block h-px w-4 bg-current transition-all duration-500 group-hover:w-6" />
               <span className="block h-px w-5 bg-current transition-all duration-500 group-hover:w-6" />
             </button>
-            <div className="hidden lg:flex gap-7 text-[11px] uppercase tracking-[0.2em] font-medium">
-              {LINKS.slice(0, 4).map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  activeOptions={{ exact: l.to === "/" }}
-                  className="relative group py-1.5"
-                  activeProps={{ className: "text-gold" }}
-                >
-                  {l.label}
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
-                </Link>
-              ))}
-            </div>
           </div>
 
-          {/* Center: logo */}
-          <Link to="/" className="font-serif text-2xl md:text-3xl tracking-[0.3em] uppercase font-medium absolute left-1/2 -translate-x-1/2">
-            Laviva
-          </Link>
+          {/* Center Column: Logo */}
+          <div className="flex justify-center px-8 xl:px-12 min-w-max">
+            <Link to="/" className="font-serif text-2xl md:text-3xl tracking-[0.35em] uppercase font-medium z-10 whitespace-nowrap">
+              Laviva
+            </Link>
+          </div>
 
-          {/* Right */}
-          <div className="flex-1 flex items-center justify-end gap-5 md:gap-7 text-[11px] uppercase tracking-[0.2em]">
-            <div className="hidden lg:flex gap-7 mr-2">
-              {LINKS.slice(4).map((l) => (
+          {/* Right Column: About, Contact, Utilities & CTA */}
+          <div className="flex items-center justify-end gap-3 md:gap-4 text-[9px] uppercase tracking-[0.22em] font-medium min-w-0">
+            {/* Desktop Right Links */}
+            <div className="hidden xl:flex gap-4 mr-1 whitespace-nowrap">
+              {LINKS.slice(6).map((l) => (
                 <Link
-                  key={l.to}
+                  key={l.label}
                   to={l.to}
-                  className="relative group py-1.5"
+                  className="relative group py-1.5 transition-colors duration-500"
                   activeProps={{ className: "text-gold" }}
                 >
                   {l.label}
@@ -114,25 +120,32 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
                 </Link>
               ))}
             </div>
-            <span className="hidden lg:block w-px h-4 bg-current opacity-20" />
-            <button aria-label="Search" className="hidden md:block hover:text-gold transition-colors"><Search className="size-4" strokeWidth={1.2} /></button>
-            <button aria-label="Wishlist" className="hidden md:block hover:text-gold transition-colors"><Heart className="size-4" strokeWidth={1.2} /></button>
-            <a aria-label="WhatsApp" href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="hover:text-gold transition-colors">
-              <Whatsapp className="size-4" />
-            </a>
-            <button aria-label="Bag" className="hover:text-gold transition-colors flex items-center gap-1.5">
-              <ShoppingBag className="size-4" strokeWidth={1.2} />
-              <span className="hidden md:inline text-[10px]">(0)</span>
-            </button>
+            
+            <span className="hidden xl:block w-px h-4 bg-current opacity-20" />
+
+            {/* Utilities */}
+            <div className="flex items-center gap-3 md:gap-4 shrink-0">
+              <button aria-label="Search" className="hidden sm:block hover:text-gold transition-colors"><Search className="size-4" strokeWidth={1.1} /></button>
+              <button aria-label="Wishlist" className="hidden sm:block hover:text-gold transition-colors"><Heart className="size-4" strokeWidth={1.1} /></button>
+              <a aria-label="WhatsApp" href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="hover:text-gold transition-colors">
+                <Whatsapp className="size-4" />
+              </a>
+              <button aria-label="Bag" className="hover:text-gold transition-colors flex items-center gap-1.5">
+                <ShoppingBag className="size-4" strokeWidth={1.1} />
+                <span className="hidden md:inline text-[8px]">(0)</span>
+              </button>
+            </div>
+
+            {/* CTA */}
             <Link
               to="/contact"
-              className={`hidden md:inline-flex items-center gap-2 ml-2 px-5 py-2.5 text-[10px] uppercase tracking-[0.25em] border transition-all duration-500 ${
+              className={`hidden lg:inline-flex items-center gap-2 ml-1 px-4 py-2.5 text-[8.5px] uppercase tracking-[0.3em] font-medium border transition-all duration-500 shrink-0 ${
                 solid
                   ? "border-ink bg-ink text-ivory hover:bg-gold hover:border-gold"
                   : "border-ivory/70 text-ivory hover:bg-ivory hover:text-ink"
               }`}
             >
-              <Calendar className="size-3.5" strokeWidth={1.4} />
+              <Calendar className="size-3.5" strokeWidth={1.2} />
               Book Consultation
             </Link>
           </div>
@@ -141,7 +154,7 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-[70] transition-all duration-700 lg:hidden ${
+        className={`fixed inset-0 z-[70] transition-all duration-700 xl:hidden ${
           open ? "pointer-events-auto" : "pointer-events-none"
         }`}
         aria-hidden={!open}
