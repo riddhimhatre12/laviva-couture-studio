@@ -6,8 +6,6 @@ import {
   ShoppingBag,
   Heart,
   Menu,
-  Camera as Instagram,
-  ThumbsUp as Facebook,
   MessageCircle,
   ArrowUpRight,
   ArrowRight,
