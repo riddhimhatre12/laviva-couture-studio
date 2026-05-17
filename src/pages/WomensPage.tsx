@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { CoutureCollectionPage } from "@/components/site/CoutureCollectionPage";
 import colBridal from "@/assets/col-bridal.jpg";
 import colPret from "@/assets/col-pret.jpg";
@@ -6,17 +5,7 @@ import prod2 from "@/assets/prod-2.jpg";
 import ig2 from "@/assets/ig-2.jpg";
 import ig5 from "@/assets/ig-5.jpg";
 
-export const Route = createFileRoute("/womens")({
-  head: () => ({
-    meta: [
-      { title: "Women's Wear — Bridal Lehengas, Party Gowns & Indo-Western | Laviva" },
-      { name: "description", content: "Hand-crafted bridal lehengas, draped silk gowns, Indo-western ensembles and elegant party wear from Laviva Couture, Virar." },
-    ],
-  }),
-  component: WomensPage,
-});
-
-function WomensPage() {
+export default function WomensPage() {
   return (
     <CoutureCollectionPage
       eyebrow="Women's Wear"

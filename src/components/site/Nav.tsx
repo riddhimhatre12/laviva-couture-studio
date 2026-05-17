@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Search, ShoppingBag, Heart, Calendar } from "lucide-react";
 
@@ -73,15 +73,14 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
             {/* Desktop Left Links */}
             <div className="hidden xl:flex gap-4 text-[9px] uppercase tracking-[0.22em] font-medium whitespace-nowrap">
               {LINKS.slice(1, 5).map((l, i) => (
-                <Link
+                <NavLink
                   key={l.label}
                   to={l.to}
-                  className="relative group py-1.5"
-                  activeProps={{ className: "text-gold" }}
+                  className={({ isActive }) => `relative group py-1.5 ${isActive ? "text-gold" : ""}`}
                 >
                   {l.label}
                   <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
-                </Link>
+                </NavLink>
               ))}
             </div>
 
@@ -109,15 +108,14 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
             {/* Desktop Right Links */}
             <div className="hidden xl:flex gap-4 mr-1 whitespace-nowrap">
               {LINKS.slice(6).map((l) => (
-                <Link
+                <NavLink
                   key={l.label}
                   to={l.to}
-                  className="relative group py-1.5 transition-colors duration-500"
-                  activeProps={{ className: "text-gold" }}
+                  className={({ isActive }) => `relative group py-1.5 transition-colors duration-500 ${isActive ? "text-gold" : ""}`}
                 >
                   {l.label}
                   <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
-                </Link>
+                </NavLink>
               ))}
             </div>
             
@@ -178,15 +176,14 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
           <ul className="flex-1 space-y-1">
             {LINKS.map((l, i) => (
               <li key={l.to}>
-                <Link
+                <NavLink
                   to={l.to}
                   onClick={() => setOpen(false)}
-                  className="block font-serif text-3xl py-3 hover:text-gold hover:translate-x-2 transition-all duration-500"
+                  className={({ isActive }) => `block font-serif text-3xl py-3 hover:text-gold hover:translate-x-2 transition-all duration-500 ${isActive ? "text-gold italic" : ""}`}
                   style={{ transitionDelay: open ? `${i * 40}ms` : "0ms" }}
-                  activeProps={{ className: "text-gold italic" }}
                 >
                   {l.label}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>

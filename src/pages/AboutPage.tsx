@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Announcement, Nav, FloatingWhatsApp } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
@@ -7,17 +7,7 @@ import craft from "@/assets/craft.jpg";
 import ig6 from "@/assets/ig-6.jpg";
 import ig3 from "@/assets/ig-3.jpg";
 
-export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — The Laviva Couture Atelier in Virar" },
-      { name: "description", content: "The story of Laviva Couture — a premium boutique in Virar crafting wedding sherwanis, designer blazers and modern Indian couture since 2014." },
-    ],
-  }),
-  component: About,
-});
-
-function About() {
+export default function AboutPage() {
   return (
     <main className="bg-ivory text-ink overflow-x-hidden">
       <Announcement />

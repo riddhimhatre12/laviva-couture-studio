@@ -1,21 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { Announcement, Nav, FloatingWhatsApp } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { FadeIn } from "@/components/site/Reveal";
 
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact & Book Consultation — Laviva Couture, Virar" },
-      { name: "description", content: "Book a private styling consultation at the Laviva Couture atelier in Virar West, Mumbai. WhatsApp, call or email our concierge." },
-    ],
-  }),
-  component: Contact,
-});
-
-function Contact() {
+export default function ContactPage() {
   return (
     <main className="bg-ivory text-ink overflow-x-hidden">
       <Announcement />
