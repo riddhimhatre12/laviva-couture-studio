@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 *   **React Entrypoint Bootstrapper**: Created [src/main.tsx](file:///c:/Users/Shubham/laviva-couture-studio/src/main.tsx) to mount the React 19 app and tie in the TanStack `RouterProvider` under client-side strict mode.
 *   **Standard Build Pipeline**: Configured production static asset bundling utilizing modern Vite commands.
 
-### Changed
+### Changed..............
 *   **SPA Migration**: Migrated the codebase from a full-stack server-rendering (**TanStack Start + Vinxi**) model to a highly efficient **React + Vite SPA** client-side application.
 *   **Router Simplification**: Updated [src/routes/__root.tsx](file:///c:/Users/Shubham/laviva-couture-studio/src/routes/__root.tsx) to act as a client-side layout, completely removing server-only head metadata injections, server script injection hooks (`HeadContent`, `Scripts`), and server shell wrappers.
 *   **Vite Configurations**: Rewrote [vite.config.ts](file:///c:/Users/Shubham/laviva-couture-studio/vite.config.ts) to utilize standard frontend plugins (`@vitejs/plugin-react`, `@tailwindcss/vite`, `@tanstack/router-plugin/vite`, `vite-tsconfig-paths`) and removed `@lovable.dev` specific bundles.
