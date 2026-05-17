@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowRight, Heart } from "lucide-react";
 import { Announcement, Nav, FloatingWhatsApp } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";

@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { CoutureCollectionPage } from "@/components/site/CoutureCollectionPage";
 import hero from "@/assets/hero.jpg";
 import prod1 from "@/assets/prod-1.jpg";
@@ -12,17 +11,7 @@ import ig2 from "@/assets/ig-2.jpg";
 import ig4 from "@/assets/ig-4.jpg";
 import ig5 from "@/assets/ig-5.jpg";
 
-export const Route = createFileRoute("/collections")({
-  head: () => ({
-    meta: [
-      { title: "Couture Collections — Laviva Couture, Virar" },
-      { name: "description", content: "Explore Laviva Couture's full edit — wedding sherwanis, designer blazers, bridal lehengas, party gowns and Indo-western ensembles." },
-    ],
-  }),
-  component: CollectionsPage,
-});
-
-function CollectionsPage() {
+export default function CollectionsPage() {
   return (
     <CoutureCollectionPage
       eyebrow="The Atelier"

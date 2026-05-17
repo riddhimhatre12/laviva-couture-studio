@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import {
@@ -33,10 +33,6 @@ import ig6 from "@/assets/ig-6.jpg";
 import { Nav, Announcement, FloatingWhatsApp } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { FadeIn } from "@/components/site/Reveal";
-
-export const Route = createFileRoute("/")({
-  component: Index,
-});
 
 const ease = [0.19, 1, 0.22, 1] as const;
 
@@ -206,7 +202,7 @@ function IndoWesternFeature() {
       <div className="max-w-7xl mx-auto px-6 md:px-16 relative">
         <div className="grid md:grid-cols-2 gap-20 items-center">
           <div className="order-2 md:order-1">
-            <FadeIn direction="left">
+            <FadeIn>
               <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-bold">— The Fusion Edit</span>
               <h2 className="text-5xl md:text-8xl font-serif mt-6 mb-10 leading-[0.9]">
                 Modern <br /> <span className="italic">Indo-Western.</span>
@@ -240,20 +236,20 @@ function IndoWesternFeature() {
             </FadeIn>
           </div>
           <div className="order-1 md:order-2 grid grid-cols-2 gap-4 md:gap-8 h-[600px] md:h-[800px]">
-            <FadeIn direction="up" delay={0.2} className="h-full">
+            <FadeIn delay={0.2} className="h-full">
               <div className="h-full overflow-hidden relative group">
                 <img src={iwMen} alt="Indo-Western Men" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
                 <div className="absolute inset-0 bg-ink/20 group-hover:bg-ink/0 transition-all duration-700" />
               </div>
             </FadeIn>
             <div className="flex flex-col gap-4 md:gap-8 pt-12 md:pt-24">
-              <FadeIn direction="up" delay={0.4} className="h-2/3">
+              <FadeIn delay={0.4} className="h-2/3">
                 <div className="h-full overflow-hidden relative group">
                   <img src={iwWomen} alt="Indo-Western Women" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
                   <div className="absolute inset-0 bg-ink/20 group-hover:bg-ink/0 transition-all duration-700" />
                 </div>
               </FadeIn>
-              <FadeIn direction="up" delay={0.6} className="h-1/3">
+              <FadeIn delay={0.6} className="h-1/3">
                 <div className="h-full overflow-hidden relative group">
                   <img src={casualLuxe} alt="Casual Luxury" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
                   <div className="absolute inset-0 bg-ink/20 group-hover:bg-ink/0 transition-all duration-700" />
@@ -279,7 +275,7 @@ function CasualSection() {
             </FadeIn>
           </div>
           <div className="w-full md:w-1/2">
-            <FadeIn direction="right">
+            <FadeIn>
               <div className="flex items-center gap-3 mb-6">
                 <Sparkles className="size-5 text-gold animate-pulse" />
                 <span className="text-gold text-[11px] uppercase tracking-[0.5em] font-bold">Elevated Everyday</span>
@@ -497,7 +493,7 @@ function Story() {
         style={{ backgroundImage: `url(${craft})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'grayscale(100%) brightness(0.5)' }} 
       />
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 md:gap-32 items-center relative z-10">
-        <FadeIn direction="left">
+        <FadeIn>
           <div className="relative">
             <div className="aspect-[4/5] overflow-hidden">
               <img
@@ -518,7 +514,7 @@ function Story() {
           </div>
         </FadeIn>
         <div className="space-y-12">
-          <FadeIn direction="right">
+          <FadeIn>
             <span className="text-gold text-[11px] uppercase tracking-[0.6em] font-bold">— The Laviva Narrative</span>
             <h2 className="text-5xl md:text-8xl font-serif leading-[0.85] mt-8 mb-12">
               Heritage. <br /> <span className="italic ml-12">Modernity.</span> <br /> Soul.

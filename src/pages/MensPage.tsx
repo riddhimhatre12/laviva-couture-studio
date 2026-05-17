@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { CoutureCollectionPage } from "@/components/site/CoutureCollectionPage";
 import hero from "@/assets/hero.jpg";
 import prod1 from "@/assets/prod-1.jpg";
@@ -8,17 +7,7 @@ import colIndoWestern from "@/assets/col-indowestern.jpg";
 import ig1 from "@/assets/ig-1.jpg";
 import ig4 from "@/assets/ig-4.jpg";
 
-export const Route = createFileRoute("/mens")({
-  head: () => ({
-    meta: [
-      { title: "Men's Couture — Wedding Sherwanis & Designer Blazers | Laviva" },
-      { name: "description", content: "Hand-embroidered wedding sherwanis, velvet bandhgalas, tuxedos and designer blazers for the modern Indian groom. Tailored in Virar." },
-    ],
-  }),
-  component: MensPage,
-});
-
-function MensPage() {
+export default function MensPage() {
   return (
     <CoutureCollectionPage
       eyebrow="Men's Couture"
