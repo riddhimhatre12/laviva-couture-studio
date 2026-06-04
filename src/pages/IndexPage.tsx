@@ -1,368 +1,242 @@
-import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
-  ShoppingBag,
-  Heart,
-  ArrowUpRight,
-  ArrowRight,
-  Eye,
-  Sparkles,
+  Dumbbell, Flame, HeartPulse, Users, Apple, Trophy,
+  Clock, MapPin, Phone, Mail, Menu, X, ArrowUpRight, Check, Star,
 } from "lucide-react";
 import { toast } from "sonner";
 
-import hero from "@/assets/hero.jpg";
-import colBridal from "@/assets/col-bridal.jpg";
-import colPret from "@/assets/col-pret.jpg";
-import colIndoWestern from "@/assets/col-indowestern.jpg";
-import iwMen from "@/assets/indowestern-men.png";
-import iwWomen from "@/assets/indowestern-women.png";
-import casualLuxe from "@/assets/casual-luxe.png";
-import craft from "@/assets/craft.jpg";
-import prod1 from "@/assets/prod-1.jpg";
-import prod2 from "@/assets/prod-2.jpg";
-import prod3 from "@/assets/prod-3.jpg";
-import prod4 from "@/assets/prod-4.jpg";
-import ig1 from "@/assets/ig-1.jpg";
-import ig2 from "@/assets/ig-2.jpg";
-import ig3 from "@/assets/ig-3.jpg";
-import ig4 from "@/assets/ig-4.jpg";
-import ig5 from "@/assets/ig-5.jpg";
-import ig6 from "@/assets/ig-6.jpg";
-
-import { Nav, Announcement, FloatingWhatsApp } from "@/components/site/Nav";
-import { Footer } from "@/components/site/Footer";
-import { FadeIn } from "@/components/site/Reveal";
+import hero from "@/assets/gym-hero.jpg";
+import gymClass from "@/assets/gym-class.jpg";
+import gymFloor from "@/assets/gym-floor.jpg";
+import gymTrainer from "@/assets/gym-trainer.jpg";
+import gymNutrition from "@/assets/gym-nutrition.jpg";
+import gymCardio from "@/assets/gym-cardio.jpg";
+import gymHiit from "@/assets/gym-hiit.jpg";
 
 const ease = [0.19, 1, 0.22, 1] as const;
 
+const Instagram = (p: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+const Facebook = (p: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" {...p}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+const Whatsapp = (p: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...p}>
+    <path d="M20.52 3.48A11.94 11.94 0 0 0 12.05 0C5.5 0 .2 5.3.2 11.84a11.7 11.7 0 0 0 1.6 5.93L0 24l6.4-1.68a11.85 11.85 0 0 0 5.65 1.44h.01c6.55 0 11.85-5.3 11.85-11.84a11.77 11.77 0 0 0-3.49-8.44ZM12.06 21.5h-.01a9.85 9.85 0 0 1-5.02-1.38l-.36-.21-3.8 1 1.01-3.7-.23-.38a9.83 9.83 0 0 1-1.5-5.2c0-5.44 4.43-9.86 9.88-9.86a9.81 9.81 0 0 1 6.98 2.9 9.78 9.78 0 0 1 2.89 6.98c0 5.45-4.43 9.85-9.86 9.85Zm5.41-7.38c-.3-.15-1.76-.86-2.03-.96s-.47-.15-.67.15-.77.96-.94 1.16-.35.22-.65.07a8.1 8.1 0 0 1-2.38-1.47 8.94 8.94 0 0 1-1.65-2.06c-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5s.05-.37-.03-.52-.67-1.61-.92-2.21c-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37s-1.05 1.03-1.05 2.5 1.07 2.91 1.22 3.11c.15.2 2.11 3.22 5.12 4.52a17 17 0 0 0 1.71.63c.72.23 1.37.2 1.89.12.58-.09 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z" />
+  </svg>
+);
+
+// ------------------ NAV ------------------
+function Nav() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 30);
+    on();
+    window.addEventListener("scroll", on);
+    return () => window.removeEventListener("scroll", on);
+  }, []);
+  const links = [
+    { l: "Home", h: "#home" },
+    { l: "About", h: "#about" },
+    { l: "Programs", h: "#programs" },
+    { l: "Trainers", h: "#trainers" },
+    { l: "Pricing", h: "#pricing" },
+    { l: "Contact", h: "#contact" },
+  ];
+  return (
+    <>
+      <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "bg-jet/85 backdrop-blur-xl border-b border-bone/10 py-3" : "bg-transparent py-5"}`}>
+        <div className="max-w-7xl mx-auto px-5 md:px-10 flex items-center justify-between">
+          <a href="#home" className="flex items-center gap-2 group">
+            <div className="size-9 grid place-items-center bg-blood text-bone font-display text-xl tracking-wider group-hover:rotate-[12deg] transition-transform duration-500">RB</div>
+            <div className="leading-tight">
+              <div className="font-display text-bone text-lg tracking-[0.18em]">RB FITNESS</div>
+              <div className="text-[9px] uppercase tracking-[0.4em] text-blood -mt-0.5">Gym & Nutrition</div>
+            </div>
+          </a>
+
+          <nav className="hidden lg:flex items-center gap-9">
+            {links.map((l) => (
+              <a key={l.h} href={l.h} className="text-[12px] uppercase tracking-[0.25em] text-bone/70 hover:text-blood transition-colors relative group">
+                {l.l}
+                <span className="absolute -bottom-1.5 left-0 w-0 h-px bg-blood transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <a href="#pricing" className="hidden md:inline-flex items-center gap-2 bg-blood hover:bg-ember text-bone px-5 py-2.5 text-[11px] uppercase tracking-[0.25em] font-semibold transition-colors">
+              Join Now <ArrowUpRight className="size-3.5" />
+            </a>
+            <button onClick={() => setOpen(true)} className="lg:hidden text-bone p-2" aria-label="Open menu">
+              <Menu className="size-6" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+            transition={{ duration: 0.45, ease }}
+            className="fixed inset-0 z-[60] bg-jet flex flex-col"
+          >
+            <div className="flex justify-between items-center px-5 py-5 border-b border-bone/10">
+              <div className="font-display text-bone text-lg tracking-[0.18em]">RB FITNESS</div>
+              <button onClick={() => setOpen(false)} className="text-bone p-2"><X className="size-6" /></button>
+            </div>
+            <nav className="flex-1 flex flex-col justify-center px-8 gap-6">
+              {links.map((l, i) => (
+                <motion.a key={l.h} href={l.h} onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + i * 0.06 }}
+                  className="font-display text-5xl text-bone hover:text-blood transition-colors tracking-wider"
+                >
+                  {l.l}
+                </motion.a>
+              ))}
+            </nav>
+            <div className="p-6 border-t border-bone/10">
+              <a href="#pricing" onClick={() => setOpen(false)} className="block text-center bg-blood text-bone py-4 uppercase tracking-[0.25em] text-sm">Join Now</a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+// ------------------ HERO ------------------
 function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  
+  const y = useTransform(scrollYProgress, [0, 1], [0, 220]);
+  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
+
   return (
-    <section ref={ref} className="relative h-[100vh] overflow-hidden bg-nude">
-      <motion.div style={{ y, scale }} className="absolute inset-0">
-        <img
-          src={hero}
-          alt="Modern Indian Groom — Laviva Couture"
-          className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-ink/40" />
+    <section ref={ref} id="home" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-jet">
+      <motion.div style={{ y }} className="absolute inset-0">
+        <img src={hero} alt="Athlete performing barbell deadlift" width={1920} height={1080} className="w-full h-full object-cover opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-jet via-jet/70 to-jet/30" />
+        <div className="absolute inset-0 bg-grid opacity-40" />
       </motion.div>
 
-      <motion.div
-        style={{ opacity }}
-        className="relative h-full flex flex-col justify-end px-6 md:px-16 pb-20 md:pb-28 max-w-7xl mx-auto"
-      >
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, ease, delay: 0.2 }}
-          className="flex items-center gap-3 mb-6"
-        >
-          <span className="w-8 h-px bg-gold" />
-          <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-medium">
-            New Era of Indian Luxury
-          </span>
-        </motion.div>
+      <motion.div style={{ opacity }} className="relative z-10 h-full flex items-end pb-20 md:pb-28 px-5 md:px-10">
+        <div className="max-w-7xl mx-auto w-full">
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease }}
+            className="flex items-center gap-3 mb-6">
+            <span className="size-2 rounded-full bg-blood animate-pulse-red" />
+            <span className="text-[11px] uppercase tracking-[0.4em] text-bone/70">Vasai-Virar · Maharashtra</span>
+          </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease, delay: 0.4 }}
-          className="text-ivory font-serif text-6xl md:text-8xl lg:text-9xl leading-[0.9] italic max-w-5xl"
-        >
-          The Art of <br />
-          <span className="not-italic font-light tracking-tight text-ivory/90">Contemporary Craft.</span>
-        </motion.h1>
+          <h1 className="font-display text-bone leading-[0.85] text-[clamp(3.5rem,11vw,11rem)]">
+            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.1 }} className="block">
+              Train.
+            </motion.span>
+            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.25 }} className="block text-blood">
+              Transform.
+            </motion.span>
+            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.4 }} className="block text-stroke">
+              Dominate.
+            </motion.span>
+          </h1>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease, delay: 0.8 }}
-          className="text-ivory/60 max-w-lg mt-8 leading-relaxed text-lg"
-        >
-          From bespoke wedding couture to elevated Indo-western separates — we bridge the heritage of India with the silhouettes of the world.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease, delay: 1.1 }}
-          className="flex flex-col sm:flex-row gap-5 mt-12"
-        >
-          <Link
-            to="/mens"
-            className="group relative overflow-hidden bg-ivory text-ink px-12 py-5 text-[11px] uppercase tracking-[0.3em] font-medium transition-all duration-700"
-          >
-            <span className="relative z-10 flex items-center gap-3">
-              Explore Collections
-              <ArrowRight className="size-4 transition-transform duration-500 group-hover:translate-x-1.5" strokeWidth={1.2} />
-            </span>
-            <div className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
-          </Link>
-          <Link
-            to="/contact"
-            className="group inline-flex items-center justify-center gap-3 border border-ivory/40 text-ivory px-12 py-5 text-[11px] uppercase tracking-[0.3em] hover:bg-ivory/10 hover:border-ivory transition-all duration-700"
-          >
-            Book a Private Consultation
-          </Link>
-        </motion.div>
-      </motion.div>
-
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 cursor-pointer group"
-        onClick={() => document.getElementById('collections')?.scrollIntoView({ behavior: 'smooth' })}
-      >
-        <span className="text-[9px] uppercase tracking-[0.4em] text-ivory/50 group-hover:text-gold transition-colors">Explore</span>
-        <div className="w-px h-12 bg-gradient-to-b from-gold/50 to-transparent relative overflow-hidden">
-          <motion.div 
-            animate={{ y: ["0%", "100%"] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-            className="absolute top-0 left-0 w-full h-1/2 bg-gold" 
-          />
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
-function Collections() {
-  const items = [
-    { name: "Bridal Couture", caption: "Ceremonial · Hand-crafted", img: colBridal, count: "42 pieces", to: "/womens" as const },
-    { name: "Groom Atelier", caption: "Heritage · Tailored", img: colIndoWestern, count: "68 pieces", offset: true, to: "/mens" as const },
-    { name: "Indo-Western Fusion", caption: "Modern Edit · Separates", img: iwWomen, count: "37 pieces", to: "/collections" as const },
-  ];
-  return (
-    <section id="collections" className="py-24 md:py-44 px-6 md:px-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-32">
-            <div className="max-w-2xl">
-              <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-bold">— The Portfolio</span>
-              <h2 className="text-5xl md:text-8xl font-serif mt-6 leading-[0.9]">The Fine <br /> <span className="italic ml-8 md:ml-20">Edit.</span></h2>
-            </div>
-            <Link to="/collections" className="group mt-10 md:mt-0 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] font-medium border-b border-ink/10 pb-2 hover:border-gold transition-all duration-500">
-              View All Series <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" strokeWidth={1.2} />
-            </Link>
-          </div>
-        </FadeIn>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-14">
-          {items.map((it, i) => (
-            <FadeIn key={it.name} delay={i * 0.15}>
-              <Link to={it.to} className={`group block relative ${it.offset ? "md:mt-24" : ""}`}>
-                <div className="overflow-hidden mb-8 relative aspect-[4/5] bg-nude">
-                  <motion.img
-                    src={it.img}
-                    alt={it.name}
-                    loading="lazy"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 1.5, ease }}
-                    className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000"
-                  />
-                  <div className="absolute inset-0 bg-ink/10 group-hover:bg-ink/0 transition-colors duration-700" />
-                  <div className="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                    <span className="bg-ivory/95 px-4 py-1.5 text-[9px] uppercase tracking-[0.3em] text-ink font-medium">New Series</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-baseline mb-4">
-                  <h3 className="font-serif text-3xl group-hover:text-gold transition-colors duration-500">{it.name}</h3>
-                  <span className="font-serif text-gold italic text-lg">0{i + 1}</span>
-                </div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-ink/40 font-medium">
-                  {it.caption} <span className="mx-2 text-gold/30">|</span> {it.count}
-                </p>
-              </Link>
-            </FadeIn>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function IndoWesternFeature() {
-  return (
-    <section className="py-24 md:py-48 bg-ink text-ivory overflow-hidden relative">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gold rounded-full blur-[160px] translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold rounded-full blur-[140px] -translate-x-1/2 translate-y-1/2" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 md:px-16 relative">
-        <div className="grid md:grid-cols-2 gap-20 items-center">
-          <div className="order-2 md:order-1">
-            <FadeIn>
-              <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-bold">— The Fusion Edit</span>
-              <h2 className="text-5xl md:text-8xl font-serif mt-6 mb-10 leading-[0.9]">
-                Modern <br /> <span className="italic">Indo-Western.</span>
-              </h2>
-              <p className="text-ivory/60 text-lg leading-relaxed max-w-md mb-12">
-                Breaking the conventions of occasion wear. We combine structured Western tailoring with the intricate textures of Indian hand-embroidery. Designed for the modern cosmopolitan lifestyle.
-              </p>
-              <div className="space-y-6 mb-14">
-                {[
-                  "Sculpted Bandhgala Blazers",
-                  "Asymmetric Kurta Separates",
-                  "Draped Silk Fusion Gowns",
-                  "Contemporary Festive Casuals"
-                ].map((item, i) => (
-                  <motion.div 
-                    key={item}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1, duration: 0.8 }}
-                    className="flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] font-medium group cursor-default"
-                  >
-                    <span className="size-1.5 rounded-full bg-gold group-hover:scale-150 transition-transform" />
-                    <span className="group-hover:text-gold transition-colors">{item}</span>
-                  </motion.div>
-                ))}
-              </div>
-              <Link to="/collections" className="group inline-flex items-center gap-4 bg-gold text-ink px-12 py-5 text-[11px] uppercase tracking-[0.3em] font-bold hover:bg-ivory transition-all duration-700">
-                Explore Fusion Series
-                <ArrowUpRight className="size-4 group-hover:rotate-45 transition-transform duration-500" />
-              </Link>
-            </FadeIn>
-          </div>
-          <div className="order-1 md:order-2 grid grid-cols-2 gap-4 md:gap-8 h-[600px] md:h-[800px]">
-            <FadeIn delay={0.2} className="h-full">
-              <div className="h-full overflow-hidden relative group">
-                <img src={iwMen} alt="Indo-Western Men" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
-                <div className="absolute inset-0 bg-ink/20 group-hover:bg-ink/0 transition-all duration-700" />
-              </div>
-            </FadeIn>
-            <div className="flex flex-col gap-4 md:gap-8 pt-12 md:pt-24">
-              <FadeIn delay={0.4} className="h-2/3">
-                <div className="h-full overflow-hidden relative group">
-                  <img src={iwWomen} alt="Indo-Western Women" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-ink/20 group-hover:bg-ink/0 transition-all duration-700" />
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.6} className="h-1/3">
-                <div className="h-full overflow-hidden relative group">
-                  <img src={casualLuxe} alt="Casual Luxury" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-ink/20 group-hover:bg-ink/0 transition-all duration-700" />
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CasualSection() {
-  return (
-    <section className="py-24 md:py-44 px-6 md:px-16 bg-ivory">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center gap-16 md:gap-32">
-          <div className="w-full md:w-1/2 aspect-[4/5] relative">
-            <FadeIn>
-              <div className="absolute -inset-4 border border-gold/20 translate-x-4 translate-y-4 hidden md:block" />
-              <img src={casualLuxe} alt="Casual Indian Luxe" className="w-full h-full object-cover relative z-10" />
-            </FadeIn>
-          </div>
-          <div className="w-full md:w-1/2">
-            <FadeIn>
-              <div className="flex items-center gap-3 mb-6">
-                <Sparkles className="size-5 text-gold animate-pulse" />
-                <span className="text-gold text-[11px] uppercase tracking-[0.5em] font-bold">Elevated Everyday</span>
-              </div>
-              <h2 className="text-5xl md:text-7xl font-serif leading-[1] mb-10">Casual Luxe <br /> <span className="italic">Sensibility.</span></h2>
-              <p className="text-ink/60 text-lg leading-relaxed mb-12 max-w-lg">
-                Who says luxury is only for the grand altar? Our 'Casual Indian' range focuses on premium natural fabrics, subtle hand-craft, and effortless elegance for your daily celebrations.
-              </p>
-              <div className="grid grid-cols-2 gap-10 mb-14">
-                <div>
-                  <h4 className="font-serif text-2xl text-gold italic mb-2">The Linen Edit</h4>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-ink/40">Hand-spun organic linens</p>
-                </div>
-                <div>
-                  <h4 className="font-serif text-2xl text-gold italic mb-2">Minimal Pret</h4>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-ink/40">Daily designer essentials</p>
-                </div>
-              </div>
-              <Link to="/collections" className="group inline-flex items-center gap-3 border border-ink text-ink px-10 py-4 text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-ink hover:text-ivory transition-all duration-700">
-                Shop The Casual Range <ArrowRight className="size-4 transition-transform group-hover:translate-x-2" />
-              </Link>
-            </FadeIn>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function MensCouture() {
-  const looks = [
-    { name: "Ivory Heritage Sherwani", price: "₹1,85,000", img: prod1, tag: "Wedding" },
-    { name: "Royal Velvet Bandhgala", price: "₹1,42,000", img: ig4, tag: "Reception" },
-    { name: "Fusion Kurta Jacket", price: "₹85,000", img: iwMen, tag: "Indo-Western" },
-    { name: "Sapphire Silk Sherwani", price: "₹2,10,000", img: prod3, tag: "Couture" },
-    { name: "Luxe Linen Tunic", price: "₹28,000", img: casualLuxe, tag: "Casual" },
-  ];
-  return (
-    <section className="relative py-28 md:py-48 px-6 md:px-16 bg-ink text-ivory overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{ backgroundImage: "radial-gradient(circle at 20% 30%, var(--gold) 0%, transparent 40%), radial-gradient(circle at 80% 70%, var(--gold) 0%, transparent 40%)" }}
-      />
-      <div className="max-w-7xl mx-auto relative">
-        <FadeIn>
-          <div className="grid md:grid-cols-2 gap-8 items-end mb-20 md:mb-28">
-            <div>
-              <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-bold">— Men's Series</span>
-              <h2 className="text-5xl md:text-8xl font-serif italic mt-6 leading-[0.9]">
-                The Modern <br /> <span className="not-italic">Gentleman.</span>
-              </h2>
-            </div>
-            <p className="text-ivory/65 text-lg leading-relaxed max-w-md md:justify-self-end">
-              From ceremonial wedding masterpieces to contemporary Indo-western fusion. We define the silhouette of the new Indian man.
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.7 }}
+            className="mt-8 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+            <p className="text-bone/70 max-w-md text-base md:text-lg leading-relaxed">
+              The most equipped strength & conditioning facility in Vasai-Virar. Built for fighters,
+              athletes, and anyone done with average.
             </p>
+            <div className="flex flex-wrap gap-3">
+              <a href="#pricing" className="bg-blood hover:bg-ember text-bone px-8 py-4 uppercase tracking-[0.25em] text-xs font-semibold transition-colors">
+                Start Free Trial
+              </a>
+              <a href="#programs" className="border border-bone/30 hover:border-blood hover:text-blood text-bone px-8 py-4 uppercase tracking-[0.25em] text-xs font-semibold transition-colors">
+                Our Programs
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-bone/40 text-[10px] uppercase tracking-[0.4em]">
+        Scroll
+      </motion.div>
+    </section>
+  );
+}
+
+// ------------------ MARQUEE ------------------
+function Marquee() {
+  const items = ["Strength", "Cardio", "CrossFit", "HIIT", "Powerlifting", "Nutrition", "Personal Training", "Boxing"];
+  const row = [...items, ...items, ...items];
+  return (
+    <section className="bg-blood text-bone py-6 border-y border-bone/10 overflow-hidden">
+      <div className="flex gap-12 animate-marquee whitespace-nowrap font-display text-3xl md:text-5xl tracking-[0.1em]">
+        {row.map((t, i) => (
+          <span key={i} className="flex items-center gap-12">
+            {t} <span className="text-bone/40">★</span>
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ------------------ ABOUT ------------------
+function About() {
+  return (
+    <section id="about" className="relative bg-jet text-bone py-24 md:py-36 px-5 md:px-10 overflow-hidden">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+        <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease }}
+          className="md:col-span-5 relative">
+          <div className="relative aspect-[4/5] overflow-hidden">
+            <img src={gymFloor} alt="RB Fitness gym floor" width={1600} height={1100} loading="lazy" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-jet/60 to-transparent" />
           </div>
-        </FadeIn>
+          <div className="absolute -bottom-6 -right-6 bg-blood text-bone p-6 hidden md:block">
+            <div className="font-display text-5xl leading-none">10+</div>
+            <div className="text-[10px] uppercase tracking-[0.3em] mt-2">Years strong</div>
+          </div>
+        </motion.div>
 
-        <div className="grid grid-cols-12 gap-6 md:gap-8">
-          <FadeIn className="col-span-12 md:col-span-7" delay={0.1}>
-            <Link to="/mens" className="group block relative overflow-hidden aspect-[4/5] md:aspect-[5/6] bg-ink/50">
-              <img src={looks[0].img} alt={looks[0].name} loading="lazy" className="w-full h-full object-cover transition-transform duration-[2500ms] group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                <span className="text-gold text-[10px] uppercase tracking-[0.4em] font-bold mb-4 block">{looks[0].tag}</span>
-                <h3 className="font-serif text-4xl md:text-6xl italic leading-tight">{looks[0].name}</h3>
-                <div className="flex items-center gap-6 mt-6">
-                  <p className="text-ivory/80 font-serif text-xl">{looks[0].price}</p>
-                  <span className="w-12 h-px bg-gold/50" />
-                  <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-bold">Inquire</span>
-                </div>
-              </div>
-            </Link>
-          </FadeIn>
+        <div className="md:col-span-7 md:pl-10">
+          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+            className="text-blood text-[11px] uppercase tracking-[0.4em]">— About RB Fitness</motion.span>
+          <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease }}
+            className="font-display text-5xl md:text-7xl mt-4 leading-[0.95]">
+            Where weak <br />becomes <span className="text-blood">unstoppable.</span>
+          </motion.h2>
+          <p className="text-bone/65 mt-7 max-w-xl leading-relaxed">
+            RB Fitness Gym & Nutrition is Vasai-Virar's most serious training facility — built for
+            people who refuse to settle. Premium equipment, certified coaches, and a culture that
+            pushes you past every plateau.
+          </p>
 
-          <div className="col-span-12 md:col-span-5 grid grid-cols-2 gap-6 md:gap-8 md:grid-rows-2">
-            {looks.slice(1, 5).map((l, i) => (
-              <FadeIn key={l.name} delay={0.15 + i * 0.1}>
-                <Link to="/mens" className="group block relative overflow-hidden aspect-[3/4] h-full bg-ink/50">
-                  <img src={l.img} alt={l.name} loading="lazy" className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-[2000ms] group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-all duration-700">
-                    <span className="text-gold text-[9px] uppercase tracking-[0.4em] font-bold">{l.tag}</span>
-                    <h4 className="text-[13px] uppercase tracking-[0.2em] font-medium mt-2 leading-snug">{l.name}</h4>
-                    <p className="font-serif text-gold text-base mt-1.5">{l.price}</p>
-                  </div>
-                </Link>
-              </FadeIn>
+          <div className="mt-10 grid grid-cols-2 gap-6">
+            {[
+              { i: Dumbbell, t: "Pro Equipment", d: "Hammer Strength, Rogue, Life Fitness" },
+              { i: Users, t: "Expert Coaches", d: "Certified strength & nutrition pros" },
+              { i: Apple, t: "Nutrition Plans", d: "Custom diets engineered for results" },
+              { i: HeartPulse, t: "24/7 Support", d: "Track progress, stay accountable" },
+            ].map((f, i) => (
+              <motion.div key={f.t} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="border-l-2 border-blood pl-4">
+                <f.i className="size-5 text-blood mb-3" strokeWidth={1.6} />
+                <div className="font-display text-xl tracking-wider">{f.t}</div>
+                <div className="text-sm text-bone/60 mt-1">{f.d}</div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -371,284 +245,77 @@ function MensCouture() {
   );
 }
 
-function WomensEdit() {
-  const pieces = [
-    { name: "Organza Fusion Saree", price: "₹85,000", img: ig2, span: "row-span-2" },
-    { name: "Modern Indo Gown", price: "₹1,12,000", img: iwWomen, span: "" },
-    { name: "Bridal Heritage Lehenga", price: "₹1,68,000", img: colBridal, span: "row-span-2" },
-    { name: "Silk Draped Casual", price: "₹42,000", img: colPret, span: "" },
-    { name: "Crystal Cocktail Sari", price: "₹92,000", img: ig5, span: "" },
-  ];
-  const [active, setActive] = useState(0);
-  const tabs = ["Couture", "Indo-Western", "Casual Luxe", "Festive"];
-  return (
-    <section className="py-24 md:py-44 px-6 md:px-16 bg-ivory">
-      <div className="max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="text-center mb-24">
-            <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-bold">— The Boutique Edit</span>
-            <h2 className="text-5xl md:text-8xl font-serif italic mt-6">The Modern Muse.</h2>
-            <div className="flex justify-center gap-10 mt-16 flex-wrap">
-              {tabs.map((t, i) => (
-                <button
-                  key={t}
-                  onClick={() => setActive(i)}
-                  className={`text-[11px] uppercase tracking-[0.4em] font-bold pb-3 border-b-2 transition-all duration-500 ${
-                    active === i ? "border-gold text-ink" : "border-transparent text-ink/30 hover:text-ink/60"
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </div>
-        </FadeIn>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[300px] gap-4 md:gap-10">
-          {pieces.map((p, i) => (
-            <FadeIn key={p.name} delay={i * 0.1} className={p.span}>
-              <Link to="/womens" className="group block relative overflow-hidden h-full bg-nude">
-                <img src={p.img} alt={p.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-[2500ms] group-hover:scale-110" />
-                <div className="absolute inset-0 bg-ink/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-700">
-                  <div className="bg-ivory/95 p-6 text-center max-w-[80%] shadow-2xl">
-                    <h4 className="text-[10px] uppercase tracking-[0.3em] font-bold mb-2">{p.name}</h4>
-                    <p className="font-serif text-gold text-lg italic">{p.price}</p>
-                    <div className="mt-4 pt-4 border-t border-ink/10">
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-ink/60">View Details</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </FadeIn>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function BestSellers() {
-  const products = [
-    { name: "Ivory Heritage Sherwani", price: "₹1,85,000", img: prod1, tag: "Couture" },
-    { name: "Indo-Western Tuxedo", price: "₹1,18,000", img: iwMen, tag: "Fusion" },
-    { name: "Champagne Drape Gown", price: "₹1,12,000", img: prod2, tag: "Modern" },
-    { name: "Minimal Silk Kurta", price: "₹32,000", img: casualLuxe, tag: "Casual" },
+// ------------------ STATS ------------------
+function Stats() {
+  const stats = [
+    { n: "2,500+", l: "Active Members" },
+    { n: "25+", l: "Expert Trainers" },
+    { n: "10k+", l: "Sq ft Facility" },
+    { n: "98%", l: "Goals Achieved" },
   ];
   return (
-    <section className="py-24 md:py-48 px-6 md:px-16 bg-nude/30">
-      <div className="max-w-7xl mx-auto">
-        <FadeIn>
-          <div className="flex justify-between items-end mb-24">
-            <div className="max-w-xl">
-              <span className="text-gold text-[10px] uppercase tracking-[0.5em] font-bold">— Season Essentials</span>
-              <h2 className="text-5xl md:text-7xl font-serif italic mt-6 leading-[0.95]">The Most <br /> <span className="not-italic">Coveted Pieces.</span></h2>
-            </div>
-            <Link to="/collections" className="group hidden md:flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] font-bold text-ink/60 hover:text-gold transition-colors">
-              Explore All <ArrowRight className="size-4 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </div>
-        </FadeIn>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-10">
-          {products.map((p, i) => (
-            <FadeIn key={p.name} delay={i * 0.15}>
-              <div className="group cursor-pointer">
-                <div className="relative overflow-hidden aspect-[4/5] mb-8 bg-ivory shadow-lg group-hover:shadow-2xl transition-all duration-700">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-ink text-ivory px-3 py-1 text-[8px] uppercase tracking-[0.3em] font-bold">
-                      {p.tag}
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 bg-ink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="absolute inset-x-4 bottom-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                    <button className="w-full bg-ivory text-ink text-[10px] uppercase tracking-[0.3em] font-bold py-4 shadow-xl hover:bg-gold hover:text-ivory transition-all">
-                      Add to Wishlist
-                    </button>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <h4 className="text-[12px] uppercase tracking-[0.25em] font-medium mb-2">{p.name}</h4>
-                  <p className="font-serif text-gold text-lg italic">{p.price}</p>
-                </div>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Story() {
-  return (
-    <section className="bg-ink text-ivory py-32 md:py-56 px-6 md:px-16 overflow-hidden relative">
-      <div className="absolute inset-0 opacity-10 pointer-events-none" 
-        style={{ backgroundImage: `url(${craft})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'grayscale(100%) brightness(0.5)' }} 
-      />
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 md:gap-32 items-center relative z-10">
-        <FadeIn>
-          <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden">
-              <img
-                src={craft}
-                alt="Heritage Craftsmanship"
-                loading="lazy"
-                className="w-full h-full object-cover scale-110 hover:scale-100 transition-transform duration-[3000ms]"
-              />
-            </div>
-            <div className="absolute -bottom-12 -right-12 size-48 md:size-72 border-2 border-gold/20 hidden md:block" />
-            <motion.div 
-              initial={{ rotate: -90 }}
-              whileInView={{ rotate: 0 }}
-              className="absolute -top-10 -left-10 bg-gold text-ink p-8 hidden lg:block"
-            >
-              <p className="font-serif italic text-xl leading-none">Since 2014</p>
-            </motion.div>
-          </div>
-        </FadeIn>
-        <div className="space-y-12">
-          <FadeIn>
-            <span className="text-gold text-[11px] uppercase tracking-[0.6em] font-bold">— The Laviva Narrative</span>
-            <h2 className="text-5xl md:text-8xl font-serif leading-[0.85] mt-8 mb-12">
-              Heritage. <br /> <span className="italic ml-12">Modernity.</span> <br /> Soul.
-            </h2>
-            <p className="text-ivory/60 text-lg leading-relaxed max-w-lg mb-12">
-              Every Laviva creation is a dialogue between the past and the present. Born in our Virar atelier, our pieces are a testament to the hands that sew them and the people who wear them to celebrate life's finest moments.
-            </p>
-            <div className="flex flex-wrap gap-12 mb-16">
-              {[
-                { n: "10k+", l: "Dressed" },
-                { n: "240+", l: "Artisans" },
-                { n: "Virar", l: "Rooted" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <p className="font-serif text-5xl text-gold italic leading-none">{s.n}</p>
-                  <p className="text-[10px] uppercase tracking-[0.4em] text-ivory/40 mt-4 font-bold">{s.l}</p>
-                </div>
-              ))}
-            </div>
-            <Link
-              to="/about"
-              className="group inline-flex items-center gap-4 border border-gold text-gold px-12 py-5 text-[11px] uppercase tracking-[0.4em] font-bold hover:bg-gold hover:text-ink transition-all duration-700"
-            >
-              Discover Our Origin <ArrowRight className="size-4 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </FadeIn>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Consult() {
-  return (
-    <section id="consult" className="relative py-32 md:py-56 px-6 md:px-16 bg-ivory text-ink overflow-hidden">
-      <div className="max-w-5xl mx-auto text-center">
-        <FadeIn>
-          <span className="text-gold text-[11px] uppercase tracking-[0.6em] font-bold">— Atelier Concierge</span>
-          <h2 className="text-5xl md:text-8xl font-serif italic mt-8 mb-12 leading-[0.9]">
-            Begin Your <br /> Couture Journey.
-          </h2>
-          <p className="text-ink/60 text-lg leading-relaxed max-w-2xl mx-auto mb-16">
-            Schedule a personal styling session at our flagship Virar atelier or experience our world-class digital concierge service from anywhere globally.
-          </p>
-        </FadeIn>
-        <FadeIn delay={0.2}>
-          <form className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto text-left bg-nude/30 p-10 md:p-16 shadow-2xl">
-            <div className="space-y-2">
-              <label className="text-[9px] uppercase tracking-[0.3em] font-bold text-ink/40 ml-1">Identity</label>
-              <input placeholder="Full Name" className="w-full bg-transparent border-b border-ink/20 py-4 text-sm placeholder:text-ink/30 focus:outline-none focus:border-gold transition-colors" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[9px] uppercase tracking-[0.3em] font-bold text-ink/40 ml-1">Connection</label>
-              <input placeholder="Email Address" className="w-full bg-transparent border-b border-ink/20 py-4 text-sm placeholder:text-ink/30 focus:outline-none focus:border-gold transition-colors" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[9px] uppercase tracking-[0.3em] font-bold text-ink/40 ml-1">WhatsApp</label>
-              <input placeholder="+91 00000 00000" className="w-full bg-transparent border-b border-ink/20 py-4 text-sm placeholder:text-ink/30 focus:outline-none focus:border-gold transition-colors" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[9px] uppercase tracking-[0.3em] font-bold text-ink/40 ml-1">The Occasion</label>
-              <select className="w-full bg-transparent border-b border-ink/20 py-4 text-sm text-ink/60 focus:outline-none focus:border-gold transition-colors">
-                <option className="bg-ivory">Groom's Wedding</option>
-                <option className="bg-ivory">Bride's Wedding</option>
-                <option className="bg-ivory">Indo-Western / Fusion</option>
-                <option className="bg-ivory">Elevated Casual / Pret</option>
-              </select>
-            </div>
-            <button 
-              type="button" 
-              onClick={() => toast.success("Inquiry Received. A stylist will reach out shortly.")}
-              className="sm:col-span-2 mt-8 bg-ink text-ivory py-5 text-[11px] uppercase tracking-[0.4em] font-bold hover:bg-gold hover:text-ink transition-all duration-700 shadow-xl"
-            >
-              Request A Private Session
-            </button>
-          </form>
-        </FadeIn>
-      </div>
-    </section>
-  );
-}
-
-function InstagramFeed() {
-  const grid = [ig1, ig2, ig3, ig4, ig5, ig6];
-  return (
-    <section className="py-24 md:py-32 bg-ivory border-t border-ink/5">
-      <FadeIn>
-        <div className="text-center mb-16 px-6">
-          <span className="text-gold text-[11px] uppercase tracking-[0.6em] font-bold">— Our Community</span>
-          <h2 className="text-4xl md:text-6xl font-serif italic mt-6">Dressed in Laviva</h2>
-        </div>
-      </FadeIn>
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 px-2">
-        {grid.map((img, i) => (
-          <motion.a 
-            key={i} 
-            href="#" 
-            whileHover={{ y: -10 }}
-            className="relative aspect-[4/5] overflow-hidden group shadow-lg"
-          >
-            <img src={img} alt="Laviva Community" loading="lazy" className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
-            <div className="absolute inset-0 bg-ink/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-              <ShoppingBag className="size-6 text-ivory" strokeWidth={1.2} />
-            </div>
-          </motion.a>
+    <section className="bg-onyx text-bone py-16 border-y border-bone/10">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 grid grid-cols-2 md:grid-cols-4 gap-10">
+        {stats.map((s, i) => (
+          <motion.div key={s.l} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+            className="text-center md:text-left">
+            <div className="font-display text-5xl md:text-7xl text-blood">{s.n}</div>
+            <div className="text-[10px] uppercase tracking-[0.35em] text-bone/60 mt-2">{s.l}</div>
+          </motion.div>
         ))}
       </div>
     </section>
   );
 }
 
-function LogoBar() {
-  const labels = ["vogue india", "elle", "harper's bazaar", "grazia", "brides today", "verve", "the hindu", "mint lounge", "the wedding brigade"];
+// ------------------ PROGRAMS ------------------
+function Programs() {
+  const programs = [
+    { t: "Strength & Power", d: "Heavy compounds, progressive overload, raw strength built for life.", img: hero, icon: Dumbbell },
+    { t: "HIIT & CrossFit", d: "High-intensity circuits that torch fat and forge mental toughness.", img: gymHiit, icon: Flame },
+    { t: "Cardio Conditioning", d: "Treadmills, rowers, bikes — engineered endurance.", img: gymCardio, icon: HeartPulse },
+    { t: "Personal Training", d: "1-on-1 coaching with custom programming and nutrition.", img: gymTrainer, icon: Trophy },
+    { t: "Women's Fit Club", d: "Strong, sculpted, confident — coached in a focused environment.", img: gymClass, icon: Users },
+    { t: "Nutrition & Diet", d: "Macro-based meal plans crafted by certified dietitians.", img: gymNutrition, icon: Apple },
+  ];
   return (
-    <section className="py-20 md:py-32 border-y border-ink/5 overflow-hidden bg-nude/20 relative">
-      <FadeIn>
-        <p className="text-center text-[9px] uppercase tracking-[0.6em] text-ink/40 mb-16 font-bold">
-          Industry Recognition
-        </p>
-      </FadeIn>
-      
-      <div className="relative group">
-        {/* Cinematic Edge Masks */}
-        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-nude/20 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-nude/20 to-transparent z-10 pointer-events-none" />
-        
-        <div className="flex w-max animate-marquee [animation-duration:80s] whitespace-nowrap hover:[animation-play-state:paused] transition-all">
-          {[...labels, ...labels, ...labels].map((l, i) => (
-            <div key={i} className="flex items-center gap-16 md:gap-28 px-8 md:px-14">
-              <span className="font-serif text-2xl md:text-4xl tracking-wide text-ink/25 hover:text-gold transition-all duration-700 cursor-default italic lowercase font-light hover:scale-105 transform inline-block">
-                {l}
-              </span>
-              <span className="text-gold/20 text-sm">✦</span>
-            </div>
+    <section id="programs" className="bg-jet text-bone py-24 md:py-36 px-5 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div>
+            <span className="text-blood text-[11px] uppercase tracking-[0.4em]">— What we offer</span>
+            <h2 className="font-display text-5xl md:text-8xl mt-4 leading-[0.9]">
+              Programs built<br />to <span className="text-blood">break limits.</span>
+            </h2>
+          </div>
+          <p className="text-bone/60 max-w-sm">
+            Six core disciplines. One mission: become the strongest version of yourself.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {programs.map((p, i) => (
+            <motion.article key={p.t}
+              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: (i % 3) * 0.1, ease }}
+              className="group relative aspect-[4/5] overflow-hidden cursor-pointer bg-onyx"
+            >
+              <img src={p.img} alt={p.t} width={800} height={1000} loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[1200ms]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-jet via-jet/40 to-transparent" />
+
+              <div className="absolute top-5 left-5 size-12 grid place-items-center border border-bone/30 text-blood group-hover:bg-blood group-hover:text-bone group-hover:border-blood transition-all">
+                <p.icon className="size-5" strokeWidth={1.6} />
+              </div>
+
+              <div className="absolute bottom-0 inset-x-0 p-6 md:p-7">
+                <h3 className="font-display text-3xl md:text-4xl mb-2 tracking-wider">{p.t}</h3>
+                <p className="text-bone/65 text-sm leading-relaxed mb-4 max-w-[28ch]">{p.d}</p>
+                <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-blood">
+                  Explore <ArrowUpRight className="size-4" />
+                </div>
+              </div>
+              <div className="absolute inset-0 border border-bone/0 group-hover:border-blood/60 transition-colors" />
+            </motion.article>
           ))}
         </div>
       </div>
@@ -656,26 +323,338 @@ function LogoBar() {
   );
 }
 
-function Index() {
+// ------------------ FEATURE STRIP ------------------
+function FeatureStrip() {
   return (
-    <main className="bg-ivory text-ink overflow-x-hidden selection:bg-gold selection:text-ivory">
-      <Announcement />
-      <Nav transparent />
-      <Hero />
-      <LogoBar />
-      <Collections />
-      <IndoWesternFeature />
-      <CasualSection />
-      <MensCouture />
-      <WomensEdit />
-      <BestSellers />
-      <Story />
-      <Consult />
-      <InstagramFeed />
-      <Footer />
-      <FloatingWhatsApp />
-    </main>
+    <section className="relative bg-onyx text-bone py-24 md:py-32 px-5 md:px-10 overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-30" />
+      <div className="max-w-7xl mx-auto relative grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+        <div>
+          <span className="text-blood text-[11px] uppercase tracking-[0.4em]">— Nutrition Lab</span>
+          <h2 className="font-display text-5xl md:text-7xl mt-4 leading-[0.9]">
+            Train hard. <br /><span className="text-stroke-red">Fuel smarter.</span>
+          </h2>
+          <p className="text-bone/65 mt-6 max-w-md leading-relaxed">
+            Our in-house nutrition lab builds custom meal plans, supplement protocols and recovery
+            stacks — engineered to match your training and goals.
+          </p>
+          <ul className="mt-8 space-y-3">
+            {[
+              "1-on-1 dietitian consultation",
+              "Body composition analysis",
+              "Whey, mass-gainer & supplement counter",
+              "Weekly check-ins & adjustments",
+            ].map((t) => (
+              <li key={t} className="flex items-center gap-3 text-bone/80">
+                <span className="size-5 grid place-items-center bg-blood text-bone shrink-0"><Check className="size-3" strokeWidth={3} /></span>
+                <span className="text-sm">{t}</span>
+              </li>
+            ))}
+          </ul>
+          <a href="#contact" className="inline-flex items-center gap-2 mt-10 bg-blood hover:bg-ember text-bone px-7 py-3.5 uppercase tracking-[0.25em] text-[11px] font-semibold transition-colors">
+            Book Consultation <ArrowUpRight className="size-4" />
+          </a>
+        </div>
+
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease }}
+          className="relative aspect-[4/5]">
+          <img src={gymNutrition} alt="Nutrition supplements" width={1280} height={1600} loading="lazy" className="w-full h-full object-cover" />
+          <div className="absolute -bottom-5 -left-5 bg-jet border border-blood p-5 max-w-[200px]">
+            <div className="font-display text-3xl text-blood">100%</div>
+            <div className="text-[10px] uppercase tracking-[0.3em] text-bone/60 mt-1">Authentic supplements</div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
-export default Index;
+// ------------------ TRAINERS ------------------
+function Trainers() {
+  const trainers = [
+    { n: "Rohit Bhoir", r: "Founder · Head Coach", img: gymTrainer, sp: "Strength · Powerlifting" },
+    { n: "Priya Sharma", r: "Women's Fitness Lead", img: gymClass, sp: "HIIT · Transformation" },
+    { n: "Aditya Kale", r: "Performance Coach", img: gymCardio, sp: "Cardio · Endurance" },
+  ];
+  return (
+    <section id="trainers" className="bg-jet text-bone py-24 md:py-36 px-5 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-blood text-[11px] uppercase tracking-[0.4em]">— Meet the team</span>
+          <h2 className="font-display text-5xl md:text-8xl mt-4 leading-[0.9]">
+            Coached by <span className="text-blood">the best.</span>
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {trainers.map((t, i) => (
+            <motion.div key={t.n} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              className="group">
+              <div className="relative aspect-[3/4] overflow-hidden bg-onyx mb-5">
+                <img src={t.img} alt={t.n} width={1280} height={1600} loading="lazy"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1200ms]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-jet/80 via-transparent to-transparent" />
+                <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.3em] text-blood">0{i + 1}</div>
+              </div>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-display text-3xl tracking-wider">{t.n}</h3>
+                  <p className="text-bone/60 text-[11px] uppercase tracking-[0.25em] mt-1">{t.r}</p>
+                </div>
+                <span className="text-blood text-xs">{t.sp}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ------------------ PRICING ------------------
+function Pricing() {
+  const plans = [
+    { n: "Starter", p: "1,499", per: "/month", f: ["Gym access (off-peak)", "Locker room", "Basic equipment", "1 group class /week"], hl: false },
+    { n: "Pro", p: "2,499", per: "/month", f: ["24/7 gym access", "All group classes", "Free body assessment", "1 PT session /month", "Nutrition guide"], hl: true },
+    { n: "Elite", p: "4,999", per: "/month", f: ["Everything in Pro", "8 PT sessions /month", "Custom diet plan", "Supplement discount", "Priority booking"], hl: false },
+  ];
+  return (
+    <section id="pricing" className="bg-onyx text-bone py-24 md:py-36 px-5 md:px-10 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-20" />
+      <div className="max-w-7xl mx-auto relative">
+        <div className="text-center mb-16">
+          <span className="text-blood text-[11px] uppercase tracking-[0.4em]">— Memberships</span>
+          <h2 className="font-display text-5xl md:text-8xl mt-4 leading-[0.9]">
+            Choose your <span className="text-blood">battle plan.</span>
+          </h2>
+          <p className="text-bone/60 mt-6 max-w-md mx-auto">All plans include a free trial day. No commitment, no joining fees.</p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {plans.map((pl, i) => (
+            <motion.div key={pl.n} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              className={`relative p-8 md:p-10 border ${pl.hl ? "bg-blood border-blood text-bone scale-[1.02] md:scale-105" : "bg-jet border-bone/15"}`}>
+              {pl.hl && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-jet text-blood px-4 py-1 text-[10px] uppercase tracking-[0.3em] border border-blood">
+                  Most Popular
+                </div>
+              )}
+              <h3 className={`font-display text-3xl tracking-wider ${pl.hl ? "text-bone" : "text-blood"}`}>{pl.n}</h3>
+              <div className="mt-5 flex items-end gap-1">
+                <span className="text-2xl font-light">₹</span>
+                <span className="font-display text-6xl">{pl.p}</span>
+                <span className={`mb-2 text-sm ${pl.hl ? "text-bone/80" : "text-bone/50"}`}>{pl.per}</span>
+              </div>
+              <div className={`h-px my-6 ${pl.hl ? "bg-bone/30" : "bg-bone/15"}`} />
+              <ul className="space-y-3 mb-8">
+                {pl.f.map((feat) => (
+                  <li key={feat} className="flex items-start gap-3 text-sm">
+                    <Check className={`size-4 mt-0.5 shrink-0 ${pl.hl ? "text-bone" : "text-blood"}`} strokeWidth={2.5} />
+                    <span className={pl.hl ? "text-bone/95" : "text-bone/75"}>{feat}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href="#contact" className={`block text-center py-3.5 uppercase tracking-[0.25em] text-[11px] font-semibold transition-colors ${pl.hl ? "bg-jet text-bone hover:bg-bone hover:text-jet" : "bg-blood text-bone hover:bg-ember"}`}>
+                Get Started
+              </a>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ------------------ TESTIMONIALS ------------------
+function Testimonials() {
+  const reviews = [
+    { n: "Karan Mehta", r: "Lost 22 kg in 6 months. The coaches at RB don't let you settle for less. Best gym in Vasai.", role: "Member · 2 yrs" },
+    { n: "Sneha Patil", r: "Joined for weight loss, stayed for the strength. Real coaching, real community.", role: "Member · 1 yr" },
+    { n: "Vivek Naik", r: "Powerlifting setup is on point. Squat racks, deadlift platforms — everything a serious lifter needs.", role: "Powerlifter" },
+  ];
+  return (
+    <section className="bg-jet text-bone py-24 md:py-32 px-5 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-14">
+          <span className="text-blood text-[11px] uppercase tracking-[0.4em]">— Real results</span>
+          <h2 className="font-display text-4xl md:text-6xl mt-4">Voices from the floor</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {reviews.map((rv, i) => (
+            <motion.div key={rv.n} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              className="border border-bone/15 p-8 hover:border-blood transition-colors">
+              <div className="flex gap-1 mb-5 text-blood">
+                {[...Array(5)].map((_, k) => <Star key={k} className="size-4 fill-blood" />)}
+              </div>
+              <p className="text-bone/80 leading-relaxed mb-6 text-[15px]">"{rv.r}"</p>
+              <div className="font-display text-xl tracking-wider">{rv.n}</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-bone/50 mt-1">{rv.role}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ------------------ CTA ------------------
+function CTA() {
+  return (
+    <section className="relative py-28 md:py-40 px-5 md:px-10 overflow-hidden bg-jet">
+      <img src={gymFloor} alt="" width={1600} height={1100} loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-25" />
+      <div className="absolute inset-0 bg-gradient-to-r from-jet via-jet/85 to-jet/40" />
+      <div className="max-w-5xl mx-auto relative text-center">
+        <h2 className="font-display text-5xl md:text-9xl leading-[0.85]">
+          Your <span className="text-blood">excuses</span><br />end here.
+        </h2>
+        <p className="text-bone/65 mt-8 max-w-lg mx-auto">
+          Walk in for a free trial day. Tour the facility. Feel the energy. Decide afterwards.
+        </p>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <a href="#contact" className="bg-blood hover:bg-ember text-bone px-10 py-5 uppercase tracking-[0.3em] text-xs font-semibold">
+            Claim Free Trial
+          </a>
+          <a href="tel:+919876543210" className="border border-bone/30 hover:border-blood text-bone px-10 py-5 uppercase tracking-[0.3em] text-xs font-semibold">
+            Call Us
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ------------------ CONTACT ------------------
+function Contact() {
+  return (
+    <section id="contact" className="bg-onyx text-bone py-24 md:py-36 px-5 md:px-10">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16">
+        <div>
+          <span className="text-blood text-[11px] uppercase tracking-[0.4em]">— Visit · Call · Join</span>
+          <h2 className="font-display text-5xl md:text-7xl mt-4 leading-[0.9]">Find us in <span className="text-blood">Vasai-Virar.</span></h2>
+          <p className="text-bone/65 mt-6 max-w-md">Walk in any day for a no-strings tour. Or drop a message — we'll get back within 12 hours.</p>
+
+          <div className="mt-10 space-y-5">
+            {[
+              { i: MapPin, l: "Address", v: "RB Fitness Gym & Nutrition, Near Station Road, Virar West, Vasai-Virar, Maharashtra 401303" },
+              { i: Phone, l: "Phone", v: "+91 98765 43210" },
+              { i: Mail, l: "Email", v: "hello@rbfitness.in" },
+              { i: Clock, l: "Hours", v: "Mon–Sat · 5 AM – 11 PM  |  Sun · 6 AM – 10 PM" },
+            ].map((c) => (
+              <div key={c.l} className="flex items-start gap-4 border-l-2 border-blood pl-4">
+                <c.i className="size-5 text-blood mt-1 shrink-0" strokeWidth={1.6} />
+                <div>
+                  <div className="text-[10px] uppercase tracking-[0.3em] text-bone/50">{c.l}</div>
+                  <div className="text-bone/90 text-sm mt-1">{c.v}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3 mt-10">
+            {[Instagram, Facebook, Whatsapp].map((Icon, i) => (
+              <a key={i} href="#" className="size-11 grid place-items-center border border-bone/20 hover:bg-blood hover:border-blood transition-all">
+                <Icon className="size-4" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <form className="bg-jet border border-bone/10 p-8 md:p-10 space-y-5" onSubmit={(e) => { e.preventDefault(); toast.success("Request received — we'll call you shortly."); }}>
+          <h3 className="font-display text-3xl tracking-wider mb-2">Start your journey</h3>
+          <input required placeholder="Full Name" className="w-full bg-transparent border-b border-bone/20 py-3 text-sm placeholder:text-bone/40 focus:outline-none focus:border-blood transition-colors" />
+          <input required type="tel" placeholder="Phone Number" className="w-full bg-transparent border-b border-bone/20 py-3 text-sm placeholder:text-bone/40 focus:outline-none focus:border-blood transition-colors" />
+          <input type="email" placeholder="Email (optional)" className="w-full bg-transparent border-b border-bone/20 py-3 text-sm placeholder:text-bone/40 focus:outline-none focus:border-blood transition-colors" />
+          <select className="w-full bg-transparent border-b border-bone/20 py-3 text-sm text-bone/70 focus:outline-none focus:border-blood transition-colors">
+            <option className="bg-jet">Interested in · Free Trial</option>
+            <option className="bg-jet">Membership · Starter</option>
+            <option className="bg-jet">Membership · Pro</option>
+            <option className="bg-jet">Membership · Elite</option>
+            <option className="bg-jet">Personal Training</option>
+            <option className="bg-jet">Nutrition Plan</option>
+          </select>
+          <textarea rows={3} placeholder="Tell us your goal (optional)" className="w-full bg-transparent border-b border-bone/20 py-3 text-sm placeholder:text-bone/40 focus:outline-none focus:border-blood transition-colors resize-none" />
+          <button type="submit" className="w-full mt-3 bg-blood hover:bg-ember text-bone py-4 uppercase tracking-[0.3em] text-[11px] font-semibold transition-colors">
+            Book My Free Trial
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+// ------------------ FOOTER ------------------
+function Footer() {
+  return (
+    <footer className="bg-jet text-bone border-t border-bone/10 pt-16 pb-8 px-5 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-4 gap-10 mb-12">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="size-10 grid place-items-center bg-blood text-bone font-display text-xl tracking-wider">RB</div>
+              <div>
+                <div className="font-display text-bone text-lg tracking-[0.18em]">RB FITNESS</div>
+                <div className="text-[9px] uppercase tracking-[0.4em] text-blood -mt-0.5">Gym & Nutrition</div>
+              </div>
+            </div>
+            <p className="text-bone/55 text-sm max-w-sm leading-relaxed">
+              Vasai-Virar's premier strength, conditioning & nutrition facility. Built for those who
+              chase progress, not comfort.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-blood mb-5">Explore</h4>
+            <ul className="space-y-2.5 text-sm text-bone/70">
+              <li><a href="#about" className="hover:text-blood">About</a></li>
+              <li><a href="#programs" className="hover:text-blood">Programs</a></li>
+              <li><a href="#trainers" className="hover:text-blood">Trainers</a></li>
+              <li><a href="#pricing" className="hover:text-blood">Pricing</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.3em] text-blood mb-5">Reach Us</h4>
+            <ul className="space-y-2.5 text-sm text-bone/70">
+              <li>Virar West, Vasai-Virar</li>
+              <li>+91 98765 43210</li>
+              <li>hello@rbfitness.in</li>
+              <li>5 AM – 11 PM Daily</li>
+            </ul>
+          </div>
+        </div>
+        <div className="pt-6 border-t border-bone/10 flex flex-col md:flex-row justify-between gap-3 text-[10px] uppercase tracking-[0.3em] text-bone/40">
+          <p>© 2026 RB Fitness Gym & Nutrition · All Rights Reserved</p>
+          <p>Made with iron & sweat in Vasai-Virar</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ------------------ FLOATING WHATSAPP ------------------
+function FloatingWA() {
+  return (
+    <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer"
+      className="fixed bottom-6 right-6 z-40 size-14 grid place-items-center bg-[#25D366] text-white rounded-full shadow-2xl shadow-[#25D366]/40 hover:scale-110 transition-transform animate-pulse-red">
+      <Whatsapp className="size-6" />
+    </a>
+  );
+}
+
+export default function IndexPage() {
+  return (
+    <main className="bg-jet text-bone overflow-x-hidden">
+      <Nav />
+      <Hero />
+      <Marquee />
+      <About />
+      <Stats />
+      <Programs />
+      <FeatureStrip />
+      <Trainers />
+      <Pricing />
+      <Testimonials />
+      <CTA />
+      <Contact />
+      <Footer />
+      <FloatingWA />
+    </main>
+  );
+}
