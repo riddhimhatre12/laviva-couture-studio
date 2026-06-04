@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
   Dumbbell, Flame, HeartPulse, Users, Apple, Trophy,
