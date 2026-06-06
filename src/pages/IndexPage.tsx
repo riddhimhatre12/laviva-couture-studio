@@ -123,27 +123,48 @@ function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], [0, 220]);
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
 
+  const stats = [
+    { n: "5000+", l: "Members" },
+    { n: "25+", l: "Coaches" },
+    { n: "24/7", l: "Access" },
+  ];
+
   return (
-    <section ref={ref} id="home" className="relative h-[100svh] min-h-[640px] overflow-hidden bg-jet">
+    <section ref={ref} id="home" className="relative h-[100svh] min-h-[680px] overflow-hidden bg-jet">
+      {/* Background */}
       <motion.div style={{ y }} className="absolute inset-0">
-        <img src={hero} alt="Athlete performing barbell deadlift" width={1920} height={1080} className="w-full h-full object-cover opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-jet via-jet/70 to-jet/30" />
-        <div className="absolute inset-0 bg-grid opacity-40" />
+        <img src={hero} alt="Athlete performing barbell deadlift" width={1920} height={1080} className="w-full h-full object-cover opacity-55 grayscale scale-110" />
+        <div className="absolute inset-0 bg-gradient-to-t from-jet via-jet/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-jet/80 via-transparent to-jet/40" />
+        <div className="absolute inset-0 bg-grid opacity-30" />
+        {/* Atmospheric red bloom */}
+        <div className="absolute top-1/3 -right-32 w-[60vw] h-[60vw] rounded-full bg-blood/25 blur-[140px]" />
+        <div className="absolute bottom-0 -left-32 w-[45vw] h-[45vw] rounded-full bg-blood/10 blur-[120px]" />
       </motion.div>
 
-      <motion.div style={{ opacity }} className="relative z-10 h-full flex items-end pb-20 md:pb-28 px-5 md:px-10">
+      {/* Giant outlined backdrop word */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+        <span className="font-display text-transparent text-stroke leading-none whitespace-nowrap select-none opacity-[0.06] text-[40vw] md:text-[28vw] tracking-tighter italic">
+          RB
+        </span>
+      </div>
+
+      <motion.div style={{ opacity }} className="relative z-10 h-full flex items-end pb-24 md:pb-28 px-5 md:px-10">
         <div className="max-w-7xl mx-auto w-full">
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease }}
-            className="flex items-center gap-3 mb-6">
-            <span className="size-2 rounded-full bg-blood animate-pulse-red" />
-            <span className="text-[11px] uppercase tracking-[0.4em] text-bone/70">Vasai-Virar · Maharashtra</span>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease }}
+            className="inline-flex items-center gap-2.5 mb-7 px-3.5 py-1.5 rounded-full bg-bone/5 border border-bone/10 backdrop-blur-md">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-blood/70 opacity-75 animate-ping" />
+              <span className="relative inline-flex size-2 rounded-full bg-blood" />
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.35em] text-bone/80 font-semibold">Vasai-Virar · Maharashtra</span>
           </motion.div>
 
-          <h1 className="font-display text-bone leading-[0.85] text-[clamp(3.5rem,11vw,11rem)]">
-            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.1 }} className="block">
+          <h1 className="font-display text-bone leading-[0.82] italic tracking-tight text-[clamp(3.75rem,12vw,12rem)]">
+            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.1 }} className="block drop-shadow-2xl">
               Train.
             </motion.span>
-            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.25 }} className="block text-blood">
+            <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.25 }} className="block text-blood drop-shadow-[0_0_28px_rgba(220,38,38,0.45)]">
               Transform.
             </motion.span>
             <motion.span initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease, delay: 0.4 }} className="block text-stroke">
@@ -152,26 +173,40 @@ function Hero() {
           </h1>
 
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.7 }}
-            className="mt-8 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+            className="mt-10 grid md:grid-cols-2 gap-8 md:gap-12 items-end">
             <p className="text-bone/70 max-w-md text-base md:text-lg leading-relaxed">
               The most equipped strength & conditioning facility in Vasai-Virar. Built for fighters,
               athletes, and anyone done with average.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <a href="#pricing" className="bg-blood hover:bg-ember text-bone px-8 py-4 uppercase tracking-[0.25em] text-xs font-semibold transition-colors">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:justify-end">
+              <a href="#pricing" className="group inline-flex items-center justify-center gap-3 bg-blood hover:bg-ember text-bone px-8 py-4 uppercase tracking-[0.25em] text-xs font-semibold transition-colors shadow-[0_18px_40px_-15px_rgba(220,38,38,0.6)]">
                 Start Free Trial
+                <span className="h-px w-5 bg-bone/60 transition-all duration-300 group-hover:w-9" />
               </a>
-              <a href="#programs" className="border border-bone/30 hover:border-blood hover:text-blood text-bone px-8 py-4 uppercase tracking-[0.25em] text-xs font-semibold transition-colors">
+              <a href="#programs" className="inline-flex items-center justify-center bg-jet/40 backdrop-blur-md border border-bone/20 hover:border-blood hover:text-blood text-bone px-8 py-4 uppercase tracking-[0.25em] text-xs font-semibold transition-colors">
                 Our Programs
               </a>
             </div>
           </motion.div>
+
+          {/* Stat strip */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.95 }}
+            className="hidden md:flex mt-14 pt-8 border-t border-bone/10 gap-12">
+            {stats.map((s) => (
+              <div key={s.l}>
+                <div className="font-display text-bone text-3xl md:text-4xl leading-none">{s.n}</div>
+                <div className="text-[10px] uppercase tracking-[0.35em] text-bone/50 mt-2">{s.l}</div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-bone/40 text-[10px] uppercase tracking-[0.4em]">
-        Scroll
+      {/* Scroll indicator */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3 }}
+        className="absolute bottom-8 right-6 md:right-10 hidden sm:flex flex-col items-center gap-3">
+        <span className="text-[9px] text-bone/40 uppercase tracking-[0.5em] [writing-mode:vertical-rl] rotate-180 font-bold">Scroll</span>
+        <div className="h-12 w-px bg-gradient-to-b from-blood to-transparent" />
       </motion.div>
     </section>
   );
